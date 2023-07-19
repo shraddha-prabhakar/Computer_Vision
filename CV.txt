@@ -1,0 +1,180 @@
+CV
+#1. DISPLAY
+import cv2
+img=cv2.imread("cv4.jpg")
+from google.colab.patches import cv2_imshow
+cv2_imshow(img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+img.shape
+
+#DISPLAY USING MATPLOTLIB GRAPH METHOD
+import numpy
+import matplotlib.pyplot as plt
+from google.colab.patches import cv2_imshow
+img=cv2.imread("cv4.jpg")
+plt.imshow(img)
+
+#DISPLAY USING RGB METHOD
+import numpy as np
+import matplotlib.pyplot as plt
+from google.colab.patches import cv2_imshow
+img=cv2.imread("cv4.jpg")
+RGB_img=cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
+plt.imshow(RGB_img)
+
+
+import cv2
+from google.colab.patches import cv2_imshow
+img=cv2.imread("cv4.jpg",0)
+cv2_imshow(img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+img.shape
+
+#3.RESIZE
+#RESIZE UP
+import cv2
+import numpy as np
+from google.colab.patches import cv2_imshow
+image=cv2.imread("cv4.jpg")
+cv2_imshow(image)
+up_width=400
+up_height=200
+up_points=(up_width,up_height)
+resized_up=cv2.resize(image,up_points,interpolation=cv2.INTER_LINEAR)
+cv2_imshow(resized_up)
+cv2.waitKey(0)
+
+
+#RESIZE DOWN
+import cv2
+import numpy as np
+from google.colab.patches import cv2_imshow
+image=cv2.imread("cv4.jpg")
+cv2_imshow(image)
+down_width=200
+down_height=100
+down_points=(down_width,down_height)
+resized_down=cv2.resize(image,down_points,interpolation=cv2.INTER_LINEAR)
+cv2_imshow(resized_down)
+cv2.waitKey(0)
+
+#4. BORDER
+import cv2
+from google.colab.patches import cv2_imshow
+img=cv2.imread("cv4.jpg")
+window_name='image'
+image=cv2.copyMakeBorder(image,10,10,10,10,cv2.BORDER_CONSTANT,None,value=0)
+cv2_imshow(image)
+
+#5. SMOOTHING AND SHARPENING
+#SMOOTHING
+import cv2
+import numpy as np
+from google.colab.patches import cv2_imshow
+avging=cv2.blur(img,(10,10))
+gausBlur=cv2.GaussianBlur(img,(5,5),0)
+cv2_imshow(gausBlur)
+medBlur=cv2.medianBlur(img,5)
+cv2_imshow(medBlur)
+cv2.waitKey(0)
+
+#SHARPENING
+import cv2
+import numpy as np
+from google.colab.patches import cv2_imshow
+img=cv2.imread("cv4.jpg")
+img=cv2.resize(img,(200,200))
+cv2_imshow(img)
+#lets make kernel which we will slide over our image(convolution)
+kernel=np.array([[-1,-1,-1],[-1,9,-1],[-1,1,-1]])
+#now we will perform convolution using open cv for shrapening ur image
+sharp_img=cv2.filter2D(img,-1,kernel=kernel)
+cv2_imshow(sharp_img)
+
+#6.COLOR FILTER
+import cv2
+from google.colab.patches import cv2_imshow
+import matplotlib.pyplot as plt
+img=cv2.imread("cv4.jpg")
+cv2_imshow(img)
+hsv=cv2.cvtColor(img,cv2.COLOR_RGB2HSV) #convert the image fro rgb to hsv
+lower_bound=np.array([70,200,200])
+upper_bound=np.array([30,0,0])
+mask=cv2.inRange(hsv,lower_bound,upper_bound)
+res=cv2.bitwise_and(img,img,mask=mask)
+plt.figure()
+plt.subplot(131)
+plt.imshow(img)
+plt.subplot(132)
+plt.imshow(mask,cmap='gray')
+plt.subplot(133)
+plt.imshow(res,cmap='gray')
+plt.show()
+
+#7 Rotate and translate
+import cv2
+image = cv2.imread("cv4.jpg")
+from google.colab.patches import cv2_imshow
+height,width=image.shape[:2]
+center=(width/2,height/2)
+rotate_matrix=cv2.getRotationMatrix2D(center=center,angle=45,scale=1)
+rotated_image=cv2.warpAffine(src=image,M=rotate_matrix,dsize=(width,height))
+cv2_imshow(image)
+cv2_imshow(rotated_image)
+cv2.waitKey(0)
+
+import numpy as np
+import cv2
+image=cv2.imread("cv4.jpg")
+height,width=image.shape[:2]
+tx,ty=width/4,height/4
+translation_matrix=np.array([[1,0,tx],[0,1,ty]],dtype=np.float32)
+translated_image=cv2.warpAffine(src=image,M=translation_matrix,dsize=(width,height))
+cv2_imshow(translated_image)
+cv2_imshow(image)
+cv2.waitKey(0)
+
+#prog 8: detect canny edge
+import cv2
+from google.colab.patches import cv2_imshow
+import numpy as np
+from matplotlib import pyplot as plt
+img=cv2.imread("cv4.jpg")
+edges=cv2.Canny(img,100,200)
+plt.subplot(121),plt.imshow(img,cmap='gray')
+plt.title('original image'),plt.xticks([])
+plt.subplot(122),plt.imshow(edges,cmap='gray')
+plt.title('edge image'),plt.xticks([]),plt.yticks([])
+plt.show()
+
+#prog 9:erosion and dilation
+import cv2
+from google.colab.patches import cv2_imshow
+import numpy as np
+img=cv2.imread("cv4.jpg")
+kernel=np.ones((5,5),np.uint8)
+img_erosion=cv2.erode(img,kernel,iterations=1)
+img_dilation=cv2.dilate(img,kernel,iterations=1)
+cv2_imshow(img)
+cv2_imshow(img_erosion)
+cv2_imshow(img_dilation)
+cv2.waitKey(0)
+
+#prog 10: thresholding segmentation
+import cv2
+import numpy as np
+from google.colab.patches import cv2_imshow
+image=cv2.imread("cv4.jpg")
+img=cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
+ret,th1=cv2.threshold(img,160,255,cv2.THRESH_BINARY)
+th2=cv2.adaptiveThreshold(img,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,11,2)
+th3=cv2.adaptiveThreshold(img,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
+cv2_imshow(image)
+cv2_imshow(th1)
+cv2_imshow(th2)
+cv2_imshow(th3)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
